@@ -1,0 +1,14 @@
+# Godot 4
+.godot/
+*.translation
+
+# .NET
+.vs/
+bin/
+obj/
+*.user
+*.csproj.old
+
+# OS
+.DS_Store
+Thumbs.db

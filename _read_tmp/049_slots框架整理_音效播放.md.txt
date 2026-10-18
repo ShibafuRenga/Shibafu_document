@@ -1,0 +1,6 @@
+===FILE: slots妗嗘灦鏁寸悊\闊虫晥鎾斁.md===
+local CSAudioEntity = CS.LuaFramework.LuaAudioEntity
+
+用来播放音效
+
+CSAudioEntity.AsyncPlayEffectAudio(audioName, loop, volum)

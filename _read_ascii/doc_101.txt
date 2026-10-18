@@ -1,0 +1,302 @@
+===FILE: SymbolBlur.cs===
+using UnityEngine;
+using UnityEngine.Sprites;
+using UnityEngine.UI;
+
+/// <summary>
+/// 独立绘制纵向运动模糊，不依赖 Image 组件。
+/// 网格宽度等于源 Sprite，高度可在源 Sprite 的一至三倍之间调整，原图位于网格中央。
+/// </summary>
+[ExecuteAlways]
+[DisallowMultipleComponent]
+[RequireComponent(typeof(CanvasRenderer))]
+public sealed class SymbolBlur : MaskableGraphic
+{
+    private const string DefaultShaderName = "UI/SymbolBlur";
+    private const float MaxVerticalBlur = 33f;
+    private const float MinMeshHeightMultiplier = 1f;
+    private const float MaxMeshHeightMultiplier = 3f;
+
+    // 所有 SymbolBlur 共用一个材质。每个对象的模糊参数通过顶点数据传入，
+    // 因此不同参数不会创建材质实例，也不会因此破坏 UI 合批。
+    private static Material s_SharedMaterial;
+
+    [SerializeField]
+    [Tooltip("用于模糊采样的源图片。建议放入同一个 SpriteAtlas 以便合批。")]
+    private Sprite _sourceSprite;
+
+    [SerializeField, Range(MinMeshHeightMultiplier, MaxMeshHeightMultiplier)]
+    [Tooltip("渲染网格相对于源图片的高度倍数。额外空间会平均分配到图片上下两侧。")]
+    private float _meshHeightMultiplier = 1.5f;
+
+    [SerializeField, Range(0f, MaxVerticalBlur)]
+    [Tooltip("纵向双向模糊半径，单位为纹理像素。")]
+    private float _verticalBlur = 33f;
+
+    [SerializeField, Range(0f, 1f)]
+    private float _blurStrength = 1f;
+
+    [SerializeField, Range(0f, 1f)]
+    private float _antiBanding = 0.75f;
+
+    [System.NonSerialized]
+    private Sprite _lastSourceSprite;
+
+    [System.NonSerialized]
+    private float _lastMeshHeightMultiplier = -1f;
+
+    public Sprite SourceSprite
+    {
+        get => _sourceSprite;
+        set
+        {
+            if (_sourceSprite == value)
+            {
+                return;
+            }
+
+            _sourceSprite = value;
+            _lastSourceSprite = value;
+            SetNativeSizeNew();
+            SetAllDirty();
+        }
+    }
+
+    public float VerticalBlur
+    {
+        get => _verticalBlur;
+        set
+        {
+            value = Mathf.Clamp(value, 0f, MaxVerticalBlur);
+            if (Mathf.Approximately(_verticalBlur, value))
+            {
+                return;
+            }
+
+            _verticalBlur = value;
+            SetVerticesDirty();
+        }
+    }
+
+    public float MeshHeightMultiplier
+    {
+        get => _meshHeightMultiplier;
+        set
+        {
+            value = Mathf.Clamp(value, MinMeshHeightMultiplier, MaxMeshHeightMultiplier);
+            if (Mathf.Approximately(_meshHeightMultiplier, value))
+            {
+                return;
+            }
+
+            _meshHeightMultiplier = value;
+            _lastMeshHeightMultiplier = value;
+            SetNativeSizeNew();
+            SetVerticesDirty();
+        }
+    }
+
+    public float BlurStrength
+    {
+        get => _blurStrength;
+        set
+        {
+            value = Mathf.Clamp01(value);
+            if (Mathf.Approximately(_blurStrength, value))
+            {
+                return;
+            }
+
+            _blurStrength = value;
+            SetVerticesDirty();
+        }
+    }
+
+    public float AntiBanding
+    {
+        get => _antiBanding;
+        set
+        {
+            value = Mathf.Clamp01(value);
+            if (Mathf.Approximately(_antiBanding, value))
+            {
+                return;
+            }
+
+            _antiBanding = value;
+            SetVerticesDirty();
+        }
+    }
+
+    public override Texture mainTexture => _sourceSprite != null ? _sourceSprite.texture : s_WhiteTexture;
+
+    /// <summary>
+    /// 将 RectTransform.sizeDelta 设置为当前实际网格尺寸。
+    /// </summary>
+    [ContextMenu("Set Native Size New")]
+    public void SetNativeSizeNew()
+    {
+        Sprite sprite = _sourceSprite;
+        if (sprite == null)
+        {
+            return;
+        }
+
+        float pixelsPerUnit = GetPixelsPerUnit(sprite);
+        if (pixelsPerUnit <= Mathf.Epsilon)
+        {
+            return;
+        }
+
+        rectTransform.sizeDelta = new Vector2(
+            sprite.rect.width / pixelsPerUnit,
+            sprite.rect.height * _meshHeightMultiplier / pixelsPerUnit);
+        SetVerticesDirty();
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        _lastSourceSprite = _sourceSprite;
+        _lastMeshHeightMultiplier = _meshHeightMultiplier;
+        SetNativeSizeNew();
+        EnableVertexChannels();
+        ApplySharedMaterial();
+        SetAllDirty();
+    }
+
+    protected override void OnValidate()
+    {
+        base.OnValidate();
+
+        bool sourceSpriteChanged = _lastSourceSprite != _sourceSprite;
+        bool meshHeightMultiplierChanged =
+            !Mathf.Approximately(_lastMeshHeightMultiplier, _meshHeightMultiplier);
+        _lastSourceSprite = _sourceSprite;
+        _meshHeightMultiplier = Mathf.Clamp(
+            _meshHeightMultiplier,
+            MinMeshHeightMultiplier,
+            MaxMeshHeightMultiplier);
+        _lastMeshHeightMultiplier = _meshHeightMultiplier;
+
+        _verticalBlur = Mathf.Clamp(_verticalBlur, 0f, MaxVerticalBlur);
+        _blurStrength = Mathf.Clamp01(_blurStrength);
+        _antiBanding = Mathf.Clamp01(_antiBanding);
+
+        if (sourceSpriteChanged || meshHeightMultiplierChanged)
+        {
+            SetNativeSizeNew();
+        }
+
+        EnableVertexChannels();
+        ApplySharedMaterial();
+        SetAllDirty();
+    }
+
+    protected override void OnCanvasHierarchyChanged()
+    {
+        base.OnCanvasHierarchyChanged();
+        EnableVertexChannels();
+    }
+
+    protected override void OnPopulateMesh(VertexHelper vertexHelper)
+    {
+        vertexHelper.Clear();
+
+        Sprite sprite = _sourceSprite;
+        if (sprite == null)
+        {
+            return;
+        }
+
+        float pixelsPerUnit = GetPixelsPerUnit(sprite);
+        if (pixelsPerUnit <= Mathf.Epsilon)
+        {
+            return;
+        }
+
+        float sourceWidth = sprite.rect.width / pixelsPerUnit;
+        float sourceHeight = sprite.rect.height / pixelsPerUnit;
+        float meshHeight = sourceHeight * _meshHeightMultiplier;
+        Vector2 center = rectTransform.rect.center;
+
+        float minX = center.x - sourceWidth * 0.5f;
+        float maxX = center.x + sourceWidth * 0.5f;
+        float minY = center.y - meshHeight * 0.5f;
+        float maxY = center.y + meshHeight * 0.5f;
+
+        Vector4 uvBounds = DataUtility.GetOuterUV(sprite);
+        float uvHeight = uvBounds.w - uvBounds.y;
+
+        // 原图位于网格中央，额外高度平均分配到上下两侧并由 Shader 作为透明区域处理。
+        float verticalPadding = (_meshHeightMultiplier - 1f) * 0.5f;
+        float minV = uvBounds.y - uvHeight * verticalPadding;
+        float maxV = uvBounds.w + uvHeight * verticalPadding;
+        Vector4 blurParameters = new Vector4(_verticalBlur, _blurStrength, _antiBanding, 0f);
+        Color32 vertexColor = color;
+
+        AddVertex(vertexHelper, minX, minY, uvBounds.x, minV, vertexColor, uvBounds, blurParameters);
+        AddVertex(vertexHelper, minX, maxY, uvBounds.x, maxV, vertexColor, uvBounds, blurParameters);
+        AddVertex(vertexHelper, maxX, maxY, uvBounds.z, maxV, vertexColor, uvBounds, blurParameters);
+        AddVertex(vertexHelper, maxX, minY, uvBounds.z, minV, vertexColor, uvBounds, blurParameters);
+        vertexHelper.AddTriangle(0, 1, 2);
+        vertexHelper.AddTriangle(2, 3, 0);
+    }
+
+    private static void AddVertex(
+        VertexHelper vertexHelper,
+        float x,
+        float y,
+        float u,
+        float v,
+        Color32 vertexColor,
+        Vector4 uvBounds,
+        Vector4 blurParameters)
+    {
+        UIVertex vertex = UIVertex.simpleVert;
+        vertex.position = new Vector3(x, y, 0f);
+        vertex.color = vertexColor;
+        vertex.uv0 = new Vector4(u, v, 0f, 0f);
+        vertex.uv1 = uvBounds;
+        vertex.uv2 = blurParameters;
+        vertexHelper.AddVert(vertex);
+    }
+
+    private float GetPixelsPerUnit(Sprite sprite)
+    {
+        float referencePixelsPerUnit = canvas != null ? canvas.referencePixelsPerUnit : 100f;
+        return sprite.pixelsPerUnit / referencePixelsPerUnit;
+    }
+
+    private void ApplySharedMaterial()
+    {
+        if (s_SharedMaterial == null)
+        {
+            Shader targetShader = Shader.Find(DefaultShaderName);
+            if (targetShader == null)
+            {
+                return;
+            }
+
+            s_SharedMaterial = new Material(targetShader)
+            {
+                name = "SymbolBlur (Shared Runtime)",
+                hideFlags = HideFlags.HideAndDontSave
+            };
+        }
+
+        if (material != s_SharedMaterial)
+        {
+            material = s_SharedMaterial;
+        }
+    }
+
+    private void EnableVertexChannels()
+    {
+        if (canvas != null)
+        {
+            canvas.additionalShaderChannels |= AdditionalCanvasShaderChannels.TexCoord1 |
+                                               AdditionalCanvasShaderChannels.TexCoord2;
+        }
+    }
+}

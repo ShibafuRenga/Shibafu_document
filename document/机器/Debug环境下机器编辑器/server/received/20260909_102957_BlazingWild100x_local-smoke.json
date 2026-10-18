@@ -1,0 +1,13 @@
+{
+  "receivedAt": "2026-09-09T10:29:57",
+  "client": "127.0.0.1",
+  "machine": "BlazingWild100x",
+  "scheme": "local-smoke",
+  "payload": {
+    "machine": "BlazingWild100x",
+    "scheme": "local-smoke",
+    "params": {
+      "Timing.collectFlyDuration": 0.4
+    }
+  }
+}

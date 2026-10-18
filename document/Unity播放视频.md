@@ -1,0 +1,28 @@
+1. Unity VideoPlayer
+2. AVPro
+3. UMP
+4. 自己写？
+
+
+
+## 自己写方案
+
+exoPlayer+surface+GL_OES_EGL_image_external
+
+### opengles2和3的shader差异？ 
+GL_OES_EGL_image_external_essl3和GL_OES_EGL_image_external
+texture()和texture2D()
+
+
+总体思路/运行流程：
+
+Texture2D.CreateExternalTexture创建外部纹理，
+
+
+
+android侧调用unity创建外部纹理，unity记录纹理id以及texture引用。
+
+GL.IssuePluginEvent？时调用OnRenderEvent,在CreateSurfaceTexture里面创建纹理缓冲，然后unity对这个id创建实际的外部纹理。
+
+通过setVideoSurface直接渲染到这个纹理上，，这个纹理通过material显示到网格上
+

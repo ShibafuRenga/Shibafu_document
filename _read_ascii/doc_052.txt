@@ -1,0 +1,48 @@
+===FILE: 鏈哄櫒\鏈哄櫒291_Video绉绘.md===
+现代码问题：
+1. 从小游戏返回respin时，哪里有恢复Panel上的牌面？
+2. repin结算的前置动画也有问题，只有从小游戏返回才需要，如果用户在freespin里退出重进，那么这个preSettlementPlayed也需要正常恢复才对（直接变成前置动画播放完的状态，并且已经结算过的图标也应该是结算完的状态（而不是未结算状态）
+3. 切布局时应该是有个换bg Image（背景图片）的逻辑的，找找原项目里面这个切换在哪进行的，配套实现一下
+4. 恢复的时候应该也需要恢复win栏的，你看看原机器有没有这种逻辑，没有就算了
+   
+
+
+需求问题（需要我玩原机器确定）：
+1. respin结算时金额问题：结算这一下就给出了miniGame之外的奖励全都带上了（没用户说丢钱吗？。。。
+2. 中jackpot--图标win和jackpotwin播一会之后停动画播弹窗
+
+
+1. @Assets/Scripts/Lua/Machines/MonstersPartyDeluxe/MonstersPartyDeluxeSpinGame.lua:64-67 这个boardsCollection里哪有baseReelMult这个字段？
+2. @Assets/Scripts/Lua/Machines/MonstersPartyDeluxe/MonstersPartyDeluxeLinkWinCommand.lua:27-29 这里的0.5s是在等什么呢？ 
+3. respin的刷新应该在retrigger里面进行
+4. @Assets/Scripts/Lua/Machines/MonstersPartyDeluxe/MonstersPartyDeluxeLinkWinCommand.lua:63-67 这里为啥只在deltaWin > 0的时候播land?不是结算流程里面一个一个播，结算过的就不播吗？
+
+
+
+问题记录
+1. ~~女巫大spine的播放有问题，一闪一闪的，和symbol动画播放有关？~~
+2. ~~frankenStein的随机wild切换有问题，放的位置对不上，需要看看代码和协议给的数据(好像解决了，再测试一下)~~
+3. ~~respin结算飞行动画问题（位置对应不上我这可以改，但是winbar形状也对不上（这个只能等动画来调）暂时把winframe去掉了，只剩了其他，等PM看看效果能不能接受吧~~ 如果确定要不需要到时候记得删除对应资产
+4. ~~respin结算时金额显示疑似*2?不确定，但是显示的肯定比实际的多加了~~
+5. small恢复respin时frame不知道被什么激活了，~~并且改symbol有点晚，从small恢复时就不应该在settleCommand里改了，应该直接放到smallGame的ChangeLayout("L2")后面，现在已经有了RefreshRespinEndSymbol但是这个时候读取reelsViewModel还是freespin的结束牌面，得获取到下个spingame（也就是respin的牌面）才对~~
+
+
+
+1. ~~德古拉小游戏弹窗上的字没亮（X10） graphics上面的localScale问题~~
+2. ~~freespin里面线奖和win动画不同步 ~~
+3. ~~南瓜的land是什么时候播的，需要确定一下~~
+4. 恢复到小游戏时bgm的切换太晚
+5. ~~进小游戏莫名其妙播了下win（多个小游戏时）~~
+6. ~~从小游戏恢复回来时计数板没隐藏掉~~
+7. ~~小游戏恢复回来的时候非B开头的位置牌面不对~~
+8. 从base到respin没播转场--link弹窗->南瓜头飞出的特效
+9. respin回到base： 弹窗->弹窗结束飞南瓜头
+10. 进出smallgame都是简单的mask，但是现在都有飞南瓜头，不应该
+
+
+所有南瓜改成overlay?在PlayAnimation的时候打开Spine节点并且播动画，切层级。
+
+
+~~freespin restore返回respin结算会出现最后几个不结算的情况。~~
+
+再次进respin时没有正常设置respin剩余次数

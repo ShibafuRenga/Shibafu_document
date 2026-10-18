@@ -1,0 +1,75 @@
+{
+  "_doc": "Base 阶段 = 没有 Nudge 的普通 spin 中，经过 thinning/boost 后实际结算的线奖。竞品 Base RTP 贡献 20.26%，Base 线奖命中率 15.60%。keep_rate/boost_rate 由联合求解器解出。",
+  "kind": "base",
+  "rtp_contribution": 0.2026,
+  "rtp_tolerance": 0.0075,
+  "target_hit_rate": 0.156,
+  "hit_rate_metric_key": "machine.bw100x.base_line_hit_rate",
+  "owner_metric_key": "machine.bw100x.owner.base_rtp",
+  "strip_group": "base",
+  "outcome_transform": {
+    "kind": "null"
+  },
+  "tier_target_source": "none",
+  "base_rtp_control": {
+    "_doc": "双向 Base 控制。thin 方向 keep_rate 压低自然 RTP；boost 方向 boost_rate 将 loss 帧转为加权 Wild-enhanced 中奖盘面（1个池中 Wild+2个匹配符号，仅放在 flames==0 的轴上以避免触发 Nudge）。联合求解器用真实候选赔付解出 (keep_rate, boost_rate) 来命中 base target。",
+    "enabled": true,
+    "min_rtp": 0.1,
+    "max_rtp": 0.7,
+    "max_boost_rate": 0.15,
+    "boost_payout_source": "wild_enhanced_rtp_weighted",
+    "boost_wild_weights": {
+      "W01": 30,
+      "W02": 70,
+      "W03": 30,
+      "W04": 12,
+      "W05": 3
+    }
+  },
+  "win_distribution": {
+    "_doc": "赢取倍数的分档标签（Tiny = 0~1x, Colossal = 100x+），纯分类用，不控制概率。",
+    "tiers": [
+      {
+        "label": "Tiny",
+        "min_multiplier": 0,
+        "max_multiplier": 1
+      },
+      {
+        "label": "Small",
+        "equals_multiplier": 1
+      },
+      {
+        "label": "Middle",
+        "min_multiplier": 2,
+        "max_multiplier": 10
+      },
+      {
+        "label": "Big",
+        "min_multiplier": 10,
+        "max_multiplier": 20
+      },
+      {
+        "label": "Huge",
+        "min_multiplier": 20,
+        "max_multiplier": 40
+      },
+      {
+        "label": "Mega",
+        "min_multiplier": 40,
+        "max_multiplier": 70
+      },
+      {
+        "label": "Epic",
+        "min_multiplier": 70,
+        "max_multiplier": 100
+      },
+      {
+        "label": "Colossal",
+        "min_multiplier": 100,
+        "max_multiplier": null
+      }
+    ]
+  },
+  "cell_weights": {},
+  "cell_weights_meta": null
+}

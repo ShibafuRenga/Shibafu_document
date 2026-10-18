@@ -1,0 +1,27 @@
+===FILE: Layout鏂囨。.md===
+## MachineLayout
+
+是管理MachineLayoutInfo的集合
+
+Sort用冒泡排序，可优化，这个根据name比较字符串？
+
+## MachineLayoutInfo
+
+属性instanceObject和referenceObject是用来干什么的？
+
+
+MachineLayoutInfo可挂载
+
+AdjustInstanceObject 修改了instanceObject的transform信息，暂时没懂是干什么的，需要知道instanceObject
+
+
+TransferObject是用来干什么的？
+
+## MachineEventManager
+
+在MachineEventManager里面会初始化所有LayoutInfo(ScanLayouts、 InitLayouts)，layout以及所有相机下面的物体(InitLayouts)
+
+调用ChangeLayout更改当前显示的layout
+
+
+

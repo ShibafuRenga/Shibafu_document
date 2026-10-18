@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnetsyncdemo001"]
+
+[ext_resource type="Script" path="res://scripts/UI/DemoRoot.cs" id="1_root"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_root")
+
+[node name="Canvas" type="CanvasLayer" parent="."]
+
+[node name="Hud" type="Label" parent="Canvas"]
+offset_left = 24.0
+offset_top = 520.0
+offset_right = 1240.0
+offset_bottom = 700.0
+theme_override_font_sizes/font_size = 15
+text = "loading..."
+
+[node name="Panel" type="HBoxContainer" parent="Canvas"]
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 1240.0
+offset_bottom = 72.0
+theme_override_constants/separation = 16
+
+[node name="ModePicker" type="OptionButton" parent="Canvas/Panel"]
+custom_minimum_size = Vector2(280, 0)
+
+[node name="LatencyLabel" type="Label" parent="Canvas/Panel"]
+text = "Latency ms"
+
+[node name="Latency" type="HSlider" parent="Canvas/Panel"]
+custom_minimum_size = Vector2(160, 0)
+size_flags_horizontal = 3
+max_value = 400.0
+value = 120.0
+
+[node name="JitterLabel" type="Label" parent="Canvas/Panel"]
+text = "Jitter ms"
+
+[node name="Jitter" type="HSlider" parent="Canvas/Panel"]
+custom_minimum_size = Vector2(120, 0)
+size_flags_horizontal = 3
+max_value = 100.0
+value = 30.0
+
+[node name="Loss" type="CheckButton" parent="Canvas/Panel"]
+text = "模拟丢包 8%"

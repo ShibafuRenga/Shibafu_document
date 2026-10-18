@@ -1,0 +1,14 @@
+{
+  "receivedAt": "2026-09-09T10:30:47",
+  "client": "172.16.20.145",
+  "machine": "BlazingWild100x",
+  "scheme": "phone-test",
+  "payload": {
+    "machine": "BlazingWild100x",
+    "scheme": "phone-test",
+    "params": {
+      "Timing.collectFlyDuration": 0.4,
+      "Timing.nudgeArrowDuration": 0.5
+    }
+  }
+}

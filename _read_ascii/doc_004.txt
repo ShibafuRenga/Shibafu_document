@@ -1,0 +1,4 @@
+===FILE: git鍐茬獊.md===
+git merge --abort
+git reset --soft HEAD^
+git pull

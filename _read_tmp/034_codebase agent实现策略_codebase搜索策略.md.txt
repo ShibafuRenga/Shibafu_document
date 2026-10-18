@@ -1,0 +1,86 @@
+===FILE: codebase agent瀹炵幇绛栫暐\codebase鎼滅储绛栫暐.md===
+codebaseTool这里开始调用的
+
+
+codebaseTool -> WorkspaceContextWrapper -> WorkspaceContext -> WorkspaceChunks -> IWorkspaceChunkSearchService -> searchFileChunks -> doSearchFileChunks
+
+
+
+
+
+最后可以找到src/platform/workspaceChunkSearch/node/workspaceChunkSearchService.ts里面写所有策略的调用方式以及调用链的处理方式
+
+
+
+
+
+## 1. 调用链处理方式
+
+首先尝试fullWorkspaceResults，如果不行
+开始_codeSearchChunkSearch，失败之后回调 doSearchFileChunksLocally
+。doSearchFileChunksLocally里面用了_embeddingsChunkSearch或者_tfIdfWithSemanticChunkSearch, tf-idf+语义搜索里面用到了tf-idf搜索
+
+
+## 2. 调用策略
+
+然后策略调用方式中调用的策略有下面这几种
+
+#### 2.1 全工作区搜索
+
+src/platform/workspaceChunkSearch/node/fullWorkspaceChunkSearch.ts
+
+单纯的读取所有文件，名称+内容，直接读，如果超了token就直接报错，交给下一个搜索策略
+
+#### 2.2 代码搜索
+src/platform/workspaceChunkSearch/node/codeSearchChunkSearch.ts
+
+这个好像是和github仓库有关的，大概是 https://github.com/features/code-search 这个服务 ，如果仓库里面没有或者和远程仓库差异过大，就会会退到tf-idf搜索等，，，反正最后也会带tf-idf，现在python实现的时候先跳过这个代码搜索
+
+
+#### 2.3 嵌入向量搜索
+src/platform/workspaceChunkSearch/node/embeddingsChunkSearch.ts
+
+这个应该类似llama_index的rag的向量搜索，这里直接复用了这个model来计算embedding
+
+
+
+#### 2.4 tf-idf+语义搜索
+src/platform/workspaceChunkSearch/node/tfidfWithSemanticChunkSearch.ts
+
+先用tf-idf搜索一遍，然后再把这个结果和问题进行向量比对，返回语义相似度高的
+查找tf-idf搜索结果中和xx代码块有交集的。。这个没懂和什么代码块算交集
+
+
+#### 2.5 tf-idf搜索
+src/platform/workspaceChunkSearch/node/tfidfChunkSearch.ts
+
+这个东西的搜索有点麻烦，在workspaceFileIndex里面调用src/platform/workspace/vscode/workspaceServiceImpl.ts建立索引   
+
+initializeWorkspaceFiles进行数据准备
+
+doTfidfSearch进行搜索，调用_tfIdfWorker进行搜索，这个worker又调用了src/platform/tfidf/node/tfidf.ts进行搜索
+
+
+对所有chunk 带上query进行一个评分，然后堆排序
+
+
+----
+
+
+vscode copilot中tfidf搜索评分计算公式总结。
+
+计算目标：termTfIdf(查询中term的重要性) * chunkTfidf(文档中term的重要性)
+
+chunkTfidf = chunkTf * chunkIdf
+
+termTfidf = term在当前query中的出现频数 * chunkIdf
+
+chunkTf = 当前term在当前chunk中的出现频数
+
+chunkIdf = log(( 总chunk数 + 1) / 当前词在所有chunk中的出现次数)
+
+总结：
+
+vscode copilot中 tfidf = 当前term在chunk中出现的次数 * 在query中出现次数 * chunkIdf的平方。而二者重要性的乘积可以放大关键特征。若一个term在查询和文档中同时高频出现，且在全局中稀有，则乘积会显著放大其得分，反之则会抑制。
+
+

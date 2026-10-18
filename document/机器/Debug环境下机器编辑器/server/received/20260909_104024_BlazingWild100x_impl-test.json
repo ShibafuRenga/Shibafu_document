@@ -1,0 +1,13 @@
+{
+  "receivedAt": "2026-09-09T10:40:24",
+  "client": "127.0.0.1",
+  "machine": "BlazingWild100x",
+  "scheme": "impl-test",
+  "payload": {
+    "machine": "BlazingWild100x",
+    "scheme": "impl-test",
+    "params": {
+      "Timing.collectFlyDuration": 0.55
+    }
+  }
+}

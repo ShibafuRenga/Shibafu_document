@@ -1,0 +1,19 @@
+{
+    "app_id": "703",
+    "app_version": "7.74.0",
+    "category": "spin",
+    "error_level": "NeedSendInfo",
+    "filename": "/opt/service/slotsspin/spin_server/session/spin_session.py",
+    "funcName": "pack_response",
+    "lineno": "619",
+    "log_host": "ip-10-105-1-7",
+    "log_level": "INFO",
+    "log_time": "2026-08-27T04:01:07.373Z",
+    "machine": "CloverFortuneTrio",
+    "message": {
+        "spin_result": "uid:\"117591311787803324.3541698\" result{ currentBet:50000000000 gameplay{ gameStatus:PAUSE spinGame{ reels{ items:7 items:6 items:7 items:4 items:9 items:7 items:3 items:6 items:9 extra:\"\" extra:\"\" extra:\"\" extra:\"\" extra:\"\" extra:\"\" extra:\"3\" extra:\"\" extra:\"\" columnLength:3 columnLength:3 columnLength:3 } feature{ collectionState{ collections{ key:\"B01_active\" } collections{ key:\"B01_count\" value:45 } collections{ key:\"B01_level\" value:3 } collections{ key:\"B02_active\" } collections{ key:\"B02_count\" value:1 } collections{ key:\"B02_level\" } collections{ key:\"B03_active\" } collections{ key:\"B03_count\" } collections{ key:\"B03_level\" } collections{ key:\"current_spin\" } collections{ key:\"in_respin\" } collections{ key:\"is_over\" value:1 } collections{ key:\"retrigger\" } collections{ key:\"spins_remaining\" } collections{ key:\"trigger_id\" value:3 } type:\"feature_progress\" positions{ } } } feature{ wildCover{ triggerId:3 } } } } gameplay{ gameType:RESPIN gameStatus:TRIGGER spinGame{ reels{ items:0 items:0 items:0 items:4 items:0 items:0 items:3 items:0 items:0 extra:\"\" extra:\"\" extra:\"\" extra:\"\" extra:\"\" extra:\"\" extra:\"3\" extra:\"\" extra:\"\" columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 extra2:\"\" extra2:\"\" extra2:\"\" extra2:\"3\" extra2:\"\" extra2:\"\" extra2:\"\" extra2:\"\" extra2:\"\" items2:0 items2:0 items2:0 items2:4 items2:0 items2:0 items2:0 items2:0 items2:0 } feature{ wildCover{ triggerId:3 } } feature{ collectionState{ collections{ key:\"B01_active\" } collections{ key:\"B01_count\" value:45 } collections{ key:\"B01_level\" value:3 } collections{ key:\"B02_active\" } collections{ key:\"B02_count\" value:1 } collections{ key:\"B02_level\" } collections{ key:\"B03_active\" value:1 } collections{ key:\"B03_count\" } collections{ key:\"B03_level\" } collections{ key:\"current_spin\" } collections{ key:\"in_respin\" value:1 } collections{ key:\"is_over\" } collections{ key:\"retrigger\" } collections{ key:\"spins_remaining\" value:4 } collections{ key:\"trigger_id\" value:3 } type:\"feature_progress\" positions{ } } } feature{ wildCover{ triggerId:3 } } spinsCount:4 spinsCountdown:4 newSpinsCount:4 triggerID:1 } } jackpot{ } jackpot{ } jackpot{ } jackpot{ increasePool:13664000000000000 } } "
+    },
+    "mid": "11759131",
+    "pathname": "/opt/service/slotsspin/spin_server/session/spin_session.py",
+    "project": "spin"
+}

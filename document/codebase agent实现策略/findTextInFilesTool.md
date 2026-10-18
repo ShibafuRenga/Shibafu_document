@@ -1,0 +1,1 @@
+和findFileTool一样，调了vscode.workspace.findTextInFiles2

@@ -1,0 +1,26 @@
+===FILE: 闂璁板綍\UniTask寮傚父寤惰繜涓婃姤闂.md===
+有个报错理论报错弹窗时机以及报错日志时间和实际对不上，实际是在理论报错几个spin之后才弹出。理一下UniTask有错误时是怎么处理的。
+
+
+直接看OnAnticipation的调用吧，直接接收事件响应，它以UniTask的形式直接被当普通方法调用。
+
+正着看看不明白，从打错误日志/错误弹窗往回看？
+
+MachineController.OnException里面调用弹窗，这个弹窗是spin结束才弹？什么时候弹不确定，之后再看。先看哪里调用的这玩意。
+
+OnAnticipation最后的lua报错的话应该是UniTaskScheduler.UnobservedTaskException发的事件。
+
+在UniTaskScheduler里面两个方法有调这玩意，因为有报错日志所以应该是PublishUnobservedTaskException这里干的？不对UnobservedTaskException为空的时候才会走到log里面。。奇怪了，那报错log是谁报的？嘶，也是IMachine.OnException里爆出来的。。。
+
+哦就只有PublishUnobservedTaskException一个地方会调用。
+
+一个是ForgetCoreWithCatche（两个地方）。（得手动调用Forget才行？或者得手动await?
+
+
+另外是ExceptionHolder的析构函数还有个AsyncUniTaskVoidMethhdBuilder的SetException()
+
+确定SetException没有人调用，这里不是lua的await所以没有走Forget?那就只有析构函数这一条路径了
+
+
+打断点看这个ExceptionHolder是在哪构造的。。看到了Task.SetException这里（AsyncUniTaskMethodBuilder:line 62）。这里构造的话，应该是跟着promise一块析构？
+

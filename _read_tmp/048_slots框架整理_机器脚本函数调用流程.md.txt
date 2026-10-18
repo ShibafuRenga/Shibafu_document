@@ -1,0 +1,99 @@
+===FILE: slots妗嗘灦鏁寸悊\鏈哄櫒鑴氭湰鍑芥暟璋冪敤娴佺▼.md===
+目前只整理一些自己能看到的
+
+---
+## 机器启动
+
+MachineController.cs里面
+
+OnGameConsoleStartedMessageArrive过程
+
+DataProxy.EnterMachine，读取机器uid，新建Command.EnterMachine异步任务，调用Start执行EnterMachine的OnExecute，向后段进行请求，获取登陆信息，存储到SpinResultModel以及在Result,Error中返回（读CommandBase）
+
+结束后再创建Command.Machine.EnterMachine
+
+构造函数中SetMachineState？
+
+OnExecute中，:
+1. 初始化jackpot，
+2. 初始化spinResult(上一次的结果)
+3. 设置GamePlayFacade.StateProvider.IsRestoring为true，表示正在恢复状态
+4. 调用machine.onPreEnter
+5. 调用machine.Enter
+6. 大概是在恢复未完成的游戏状态？（respin之类的？）
+7. 调用machine.onLateEnter
+8. 设置GamePlayFacade.StateProvider.IsRestoring为false，表示状态恢复结束
+
+
+## Spin
+RollingState的OnEnter，状态切换到Rolling的过程，先请求，再等待动画结束，最
+后
+
+
+---
+#### RequestSpin()
+创建Spin.cs，等待Spin异步操作，
+
+将获取到的SpinUploadData上传到服务器，执行DataProxy.GetSpinResult来获取服务器响应
+
+ConverSpinResult.DecodeCommon
+```
+
+```
+GamePlayFacade.SpinResultEnumerator.SetSpinResult
+```
+也是只设置了一些值
+```
+ConverSpinResult.DecodeGamePlay
+```
+只是写了各种东西，应该没有什么响应事件
+```
+_machine.OnGetSpinResult
+
+**注意**：RequestSpin是异步操作，但是并没有await，所以rolling和请求同步开始，所以InitStartState中尽量不要获取Spin结果,
+**等待请求结果时的控制异步对象在spinGame的operation,在panelStop.OnRollingStop() 的时候结束operation**
+SpinGame里面StopRolling,调用所有的Reel.StopRoll,
+另一种停止的方式是Reel里面的StopByCurve
+里面有一大堆计算，，看不懂
+
+#### _machine.Rolling
+
+调用mahineController.Rolling
+
+OnStartRolling
+
+panelView.Rolling()
+
+OnRollEnd
+
+开始等待机器rolling
+
+调用OnStartRolling之后就是等待panelView的rolling，也就是SpinGame的Rolling，
+
+获取到所有roller的panel并且StartAll之后
+
+
+reelsModel.OnChange (IPanelView.SetResult)
+```
+1. SpinGameLuaAdapter spinGame.lua  SetAnticipation
+```
+
+转轴转的过程中各种状态变换都在SpinGame.
+
+**OnReelStatusChange (这个东西Reel的调用顺序是什么样的？)这个是在Reel里面调用的，具体可以看**
+
+
+
+
+
+---
+
+## Result
+
+机器rolling停住之后进入的阶段
+
+主要在MachineFSM.PlayResultState.cs
+
+有个PlayGamePlay，
+
+112行 _machine.GetPlayResult，在MachineControllerLuaAdapter.cs里面的GetPlayResult，根据gameType获取Commands，如果已经有commands则返回，否则从lua中(Controller.lua的GetPlayResult)中获取Command，加入command缓存中，然后返回FSM中执行(DoCommandes)

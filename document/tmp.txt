@@ -1,0 +1,1 @@
+spingame 上挂载了machine_light_base1,machine_light_base2, machine_light_respin1, machine_light_respin2四个GameObject，在播megawin的时候需要关闭， @Assets/Scripts/Lua/Machines/DiamondMultiplierRise/DiamondMultiplierRisePlayWinEffectStrategy.lua:35-37 然后在所有megawin被卸载的时间点需要打开

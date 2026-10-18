@@ -1,0 +1,45 @@
+===FILE: 鏈哄櫒\249.md===
+需要多个panel，panel直接放对应symbol上还是需要时检测位置后实例化？
+怎么通过panel完成：唤起机器旋转，设定牌面后停止，停止后显示中奖，中奖后给附近加钱?
+
+
+
+1. Panel牌面，滚动的控制：
+
+panel.startall里面，按配置的mappedReels调用StartRoll开始滚，但是只调用StartAll是否可以正常处理？，SlotMachineObject是用来干什么的？（但是这个需要调用Panel的awake初始化reel，并且buildCurveIndex处理reelindex映射，然后faststop这些。。。。
+
+处理panel的OnReelStatusChange事件即可？（待验证
+
+调用Panel的OnReelStatusChange方法的时候如何确定是哪个reel？
+
+可以从服务器获取到小机器的牌面，但是怎么传到panel上？Panel.SetSymbol和SetReelTarget？
+
+ok就是每次respin的时候直接roll然后设置牌面就行了，不需要额外请求每个小机器的spin结果，那就ez多了
+
+最后甚至需要画线奖。。。
+
+2. 多个Panel的管理（初始化，实例化创建？）
+
+放到对应Symbol预制体上就行，轴->SymbolView->Panel
+
+
+
+3. 牌面恢复
+
+这个看后端返回什么，设置就行
+
+
+4. spin和respin切换？
+
+不动的转轴用SetLocked锁住
+
+csSpinGame:ChangeLayout
+
+
+5. respin剩余次数？
+
+RespinDesc里面，RefreshCount里面获取次数然后改显示就行了。
+
+
+。。。spin到respin，转轴从5x3变成了9x1，这块需要复制多个Panel_Reels配置
+

@@ -1,0 +1,62 @@
+===FILE: 鏈哄櫒寮€鍙戠殑lua鐩稿叧.md===
+很多lua函数可以看到是CSharp脚本调用，但是这个CSharp函数是谁调用的完全找不到。。。这怎么看。。
+
+机器相关的lua文件
+
+## SpinGame.lua
+
+### spingame.lua里面的panel干什么用的？
+
+
+SpinGameLuaAdapter里面对应的方法会调用lua那边对应的方法，需要了解各个方法触发条件
+主要生命周期在SpinGame.cs的OnReelStatusChange中
+包括：
+
+OnReelStatusChange
+
+OnReelStart
+
+OnAnticipation
+
+OnSlowDown
+
+OnBonuce
+
+OnReelStop
+
+SpinGameLuaAdapter里的所有方法（有返回值的除外）均会调用lua侧对应名称的方法，需要了解各个方法调用时机
+
+## RespinDesc.lua
+
+同理，但是相对来说简单些
+
+OnShow
+
+OnHide
+
+Refresh
+
+OnDestroy
+
+就这几个
+
+## Context.lua
+
+这个好像就是在ViewFacade以及MachineUtility里面加一些上下文相关的东西，方便调用？
+这个ViewFacade的目的是什么？
+
+Lua调用C#的MachineUtility的方法(MachineUtility.lua的元表设置为CSLuaMachineUtility，调用方法的时候自己没有去元表找)，向GamePlayFacade里面调用
+
+## Controller.lua
+
+未解之谜：OnEnter到底是谁在调用？？？？？。。。解了，就是controllerLuaAdapter里面的Enter调用的，这个调用了Lua对象的父类的enter方法，然后父类的enter方法里面会调用子类的onenter（调用堆栈真好用）
+
+
+
+## FeatureVM.lua
+
+对应的应该是feature
+
+AddFeature方法中调用了IViewModel.cs(不不确定)，还有个local方法是CSViewModel.FeatureVM，这个没找到,
+
+CS.Blowfire.Slot.UI.ViewModel可能是个程序集(一个namespace)？能直接找到FeatureVM.cs

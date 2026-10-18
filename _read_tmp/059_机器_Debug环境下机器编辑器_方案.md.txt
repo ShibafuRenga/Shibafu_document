@@ -1,0 +1,35 @@
+===FILE: 鏈哄櫒\Debug鐜涓嬫満鍣ㄧ紪杈戝櫒\鏂规.md===
+# Debug 机器参数编辑器 — 落地方案（摘要）
+
+正式 OpenSpec 变更：`app_classicslots_unity/openspec/changes/debug-machine-param-editor/`  
+（含 proposal / design / specs / tasks）
+
+本机接收服务：`./server/`（已用手机联通验证）
+
+## 目标
+
+缩短「改 Timing 等表现参数」的调优环：PM 在 Debug 面板改 → 当场看效果 → 发送到本机落盘 → Dev 写回 Lua 再 Git。
+
+## 分期
+
+| 期 | 内容 | 状态 |
+|----|------|------|
+| P0 | Tab（牌面/AP/参数）+ 白名单热改 + 本地多方案 + 去掉 timeScale=0 | 待实现 |
+| P1 | 面板 Send → 本机 HTTP → Editor 写回 Lua（不自动 commit） | 服务已通，写回待做 |
+| 砍 | 转速曲线编辑器 | 另开需求 |
+
+## 关键决策
+
+1. **Helper 白名单** `GetEditableParams`，不是扫全 Constant。
+2. **Apply** 写运行时表 + 本地方案；玩法须读表引用。
+3. **多方案** 按机台存本地；新建拷贝默认；发送失败不丢方案。
+4. **POST** `/api/params`：`{ machine, scheme, params }`（已与 `server/machine_param_server.py` 对齐）。
+5. **Git** 仍由 Dev 看 diff；写回工具先 backup。
+
+## 样板机
+
+`BlazingWild100xConstant.Timing`
+
+## 下一步
+
+在工程内执行 OpenSpec apply，或直接说「开始实现 P0」。

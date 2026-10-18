@@ -1,0 +1,25 @@
+===FILE: 绾夸笂鐜鏈湴鎺ㄩ€佷竴瑙堣〃.md===
+# 线上环境本地推送一览表
+
+> 单表速查。详细文案、JSON、代码见 [`线上环境本地推送汇总.md`](./线上环境本地推送汇总.md)。
+
+**共性**：退后台排期 / 回前台取消；文案从 `Text` 随机 1 条；`Award>0` 弹领奖窗，否则仅进 App + 埋点；各来源**并行不互斥**。
+
+| 推送 | 来源 | 推送条件 | 推送时机 |
+|------|------|----------|----------|
+| Activity 优惠券 | LocalNotifications | 触发点落在 `StartTime`～`EndTime` 内 | 窗口内第 0/1 天 **19:00**（**线上已失效**） |
+| DailyBonus 每日奖励 | LocalNotifications | 无 | 第 **1～6 天** 每天 **12:00、20:00**（12 条） |
+| WelcomeBack 回归 | LocalNotifications | `WelComeBackInfo` 有效；`DayList` 非空；领取次数 `< AwardTimes`；**不校验 VIP** | 各回归日 **18:00** |
+| WeekendPush 周六 | LocalNotifications | 无 | 连续 **3 周六** × **10:00、17:00**（6 条） |
+| WeekendPush 周日 | LocalNotifications | 无 | 连续 **3 周日** × **10:00、17:00**（6 条） |
+| HourlyBonus 小时奖励 | LocalNotifications | Lua `GetClaimLeftTime() > 0` | **Now + 剩余冷却**（0～1 条） |
+| AwardPush 低余额召回 | AwardNotifications | 等级在 Rule 内；余额 **≤** 阈值；24h 内未超 1 条 | 原排期 `Now+0`；若 `< Now+60s` 则 **+60s**（实际 ~60s） |
+| MachinePush 机台召回 | AwardNotifications | 等级在 Rule 内；余额 **>** 阈值；24h 内未超 1 条 | 同上，~**60s** 后 |
+| ReadyNotifications | ReadyNotifications | 三候选各算 1 个时间点 → 取最早 1 条；48h 内未超 1 条 | 见下行 |
+| ↳ DailyBonus 候选 | ↑ | 被三选一选中 | **明天 0:00**（通常不受 FreezeSeconds 影响） |
+| ↳ HourlyBonus 候选 | ↑ | 被三选一选中；冷却 > 0 | **Now + 剩余冷却**；仅当 `< Now+30s` 才改为 **+30s** |
+| ↳ LilyBonus 候选 | ↑ | 被三选一选中；与 Daily 同时刻时 Priority 更高 | **明天 0:00**（通常不受 FreezeSeconds 影响） |
+
+**点击**：仅 **AwardPush** 带 `Award` → 弹 `PushAwardDialog`（400 × statusBonus）；其余进 App + 埋点。
+
+**退后台一次约排**：Local ~25 条 + Award 0～1 条 + Ready 0～1 条 ≈ **27+ pending**（无时间去重）。

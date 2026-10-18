@@ -1,0 +1,4 @@
+===FILE: GoogleLevelUp\GooglePlay濂栧姳.md===
+GooglePlay的奖励会通过谷歌支付的方式发放。
+
+每次从后台返回的时候就看下

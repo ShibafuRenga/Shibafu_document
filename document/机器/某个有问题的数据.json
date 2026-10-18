@@ -1,0 +1,213 @@
+{
+    "uid": "1104021787648874.0045335",
+    "result": {
+        "gameWin": "28004000",
+        "currentBet": "1000000",
+        "gameplay": [
+            {
+                "gameType": "RESPIN",
+                "gameStatus": "PAUSE",
+                "totalWin": "28004000",
+                "spinGame": {
+                    "reels": [
+                        {
+                            "items": [
+                                15,
+                                18,
+                                16,
+                                16,
+                                13,
+                                16,
+                                14,
+                                15,
+                                13
+                            ],
+                            "extra": [
+                                "1",
+                                "-2",
+                                "",
+                                "3",
+                                "2",
+                                "",
+                                "2",
+                                "B04",
+                                "2"
+                            ],
+                            "columnLength": [
+                                1,
+                                1,
+                                1,
+                                1,
+                                1,
+                                1,
+                                1,
+                                1,
+                                1
+                            ]
+                        }
+                    ],
+                    "wins": [
+                        {
+                            "type": "scatter",
+                            "lines": [
+                                {
+                                    "positions": [
+                                        7
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "jackpot",
+                            "lines": [
+                                {
+                                    "win": "20004000",
+                                    "awardName": "jackpot",
+                                    "positions": [
+                                        1
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "multiplier",
+                            "lines": [
+                                {
+                                    "win": "1000000",
+                                    "awardName": "multiplier",
+                                    "positions": [
+                                        0
+                                    ]
+                                },
+                                {
+                                    "win": "2000000",
+                                    "awardName": "multiplier",
+                                    "positions": [
+                                        4
+                                    ]
+                                },
+                                {
+                                    "win": "3000000",
+                                    "awardName": "multiplier",
+                                    "positions": [
+                                        3
+                                    ]
+                                },
+                                {
+                                    "win": "2000000",
+                                    "awardName": "multiplier",
+                                    "positions": [
+                                        8
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "feature": [
+                        {
+                            "boardsCollection": {
+                                "collections": {
+                                    "0": 1,
+                                    "1": 2,
+                                    "2": 0,
+                                    "3": 2,
+                                    "4": 2,
+                                    "5": 0,
+                                    "6": 2,
+                                    "7": 3,
+                                    "8": 2
+                                },
+                                "chooseBoard": {},
+                                "winSymbols": {},
+                                "extraSymbols": {}
+                            }
+                        },
+                        {
+                            "wildCover": {
+                                "triggerId": 4,
+                                "targetId": 7
+                            }
+                        }
+                    ],
+                    "spinsCount": 9,
+                    "triggerID": 1
+                }
+            },
+            {
+                "gameType": "FREESPIN",
+                "gameStatus": "TRIGGER",
+                "totalWin": "28004000",
+                "spinGame": {
+                    "reels": [
+                        {
+                            "items": [
+                                -1,
+                                4,
+                                3,
+                                2,
+                                -1,
+                                17,
+                                -1,
+                                15,
+                                -1,
+                                17,
+                                -1,
+                                4,
+                                3,
+                                2,
+                                -1
+                            ],
+                            "extra": [
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""
+                            ],
+                            "columnLength": [
+                                5,
+                                5,
+                                5
+                            ]
+                        }
+                    ],
+                    "feature": [
+                        {
+                            "wildCover": {
+                                "triggerId": 4,
+                                "targetId": 7
+                            }
+                        }
+                    ],
+                    "spinsCount": 1,
+                    "spinsCountdown": 1,
+                    "newSpinsCount": 1,
+                    "triggerID": 1
+                }
+            }
+        ],
+        "jackpot": [
+            {
+                "increasePool": "30000000"
+            },
+            {
+                "win": "20004000",
+                "tagId": 1,
+                "winIncrease": "40000000"
+            },
+            {
+                "increasePool": "50000000"
+            }
+        ]
+    }
+}

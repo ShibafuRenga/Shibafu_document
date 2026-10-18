@@ -1,0 +1,9 @@
+===FILE: 鏈哄櫒\294\鍚庣闂璁板綍.md===
+1. 
+base里有两个B01，但是带进respin只剩一个了
+```
+{ "uid": "1104021790671216.4438457", "result": { "currentBet": "200000", "gameplay": [ { "gameStatus": "PAUSE", "spinGame": { "reels": [ { "items": [ 0, 7, 0, 1, 0, 7, 0, 6, 0, 6, 8, 0, 1, 0, 1 ], "extra": [ "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" ], "columnLength": [ 5, 5, 5 ] } ], "feature": [ { "collectionState": { "collections": { "B01": 3, "B02": 0, "B03": 0 }, "type": "001", "positions": { } } }, { "intentionalTell": { } } ] } }, { "gameType": "RESPIN", "gameStatus": "TRIGGER", "spinGame": { "reels": [ { "items": [ 0, 4, 0, 4, 4, 1, 0, 0, 0, 0, 0, 4, 4, 0, 0 ], "extra": [ "", "1", "", "2", "2", "5.5", "", "", "", "", "", "0.25", "0.25", "", "" ], "columnLength": [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ] } ], "feature": [ { "linkLock": { } }, { "collectionState": { "collections": { "B01": 3, "B02": 0, "B03": 0 }, "type": "001", "positions": { } } } ], "spinsCount": 3, "spinsCountdown": 3, "newSpinsCount": 3, "triggerID": 1 } } ], "jackpot": [ { "increasePool": "116000000" }, { "increasePool": "174000000" }, { "increasePool": "232000000" }, { "increasePool": "290000000" } ] } }
+```
+
+2. respin over->back之后就应该把对应收集栏等级清零？
+3. 

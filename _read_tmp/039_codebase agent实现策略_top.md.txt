@@ -1,0 +1,4 @@
+===FILE: codebase agent瀹炵幇绛栫暐\top.md===
+CodeBaseAgent提示词
+
+src/extension/prompts/node/panel/codebaseAgentPrompt.tsx

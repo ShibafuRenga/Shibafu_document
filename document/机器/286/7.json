@@ -1,0 +1,19 @@
+{
+    "app_id": "703",
+    "app_version": "7.74.0",
+    "category": "spin",
+    "error_level": "NeedSendInfo",
+    "filename": "/opt/service/slotsspin/spin_server/session/spin_session.py",
+    "funcName": "pack_response",
+    "lineno": "619",
+    "log_host": "ip-10-105-1-7",
+    "log_level": "INFO",
+    "log_time": "2026-08-27T04:02:35.363Z",
+    "machine": "CloverFortuneTrio",
+    "message": {
+        "spin_result": "uid:\"117591311787803357.3471522\" result{ currentBet:50000000000 gameplay{ gameType:RESPIN spinGame{ reels{ items:0 items:0 items:0 items:4 items:0 items:4 items:0 items:0 items:0 extra:\"\" extra:\"\" extra:\"\" extra:\"313.456\" extra:\"\" extra:\"232.8\" extra:\"\" extra:\"\" extra:\"\" columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 extra2:\"\" extra2:\"\" extra2:\"\" extra2:\"313.456\" extra2:\"\" extra2:\"232.8\" extra2:\"\" extra2:\"\" extra2:\"\" items2:0 items2:0 items2:0 items2:4 items2:0 items2:4 items2:0 items2:0 items2:0 } feature{ wildCover{ triggerId:6 } } feature{ collectionState{ collections{ key:\"B01_active\" } collections{ key:\"B01_count\" value:45 } collections{ key:\"B01_level\" value:3 } collections{ key:\"B02_active\" value:1 } collections{ key:\"B02_count\" } collections{ key:\"B02_level\" } collections{ key:\"B03_active\" value:1 } collections{ key:\"B03_count\" } collections{ key:\"B03_level\" } collections{ key:\"current_spin\" value:15 } collections{ key:\"in_respin\" value:1 } collections{ key:\"is_over\" } collections{ key:\"retrigger\" } collections{ key:\"spins_remaining\" value:3 } collections{ key:\"trigger_id\" value:6 } type:\"feature_progress\" positions{ } } } feature{ wildCover{ triggerId:6 } } feature{ boardsCollection{ collections{ value:2 } collections{ key:2 value:2 } chooseBoard{ } winSymbols{ } extraSymbols{ } } } spinsCount:4 spinsCountdown:3 triggerID:1 } } jackpot{ } jackpot{ } jackpot{ } jackpot{ } } "
+    },
+    "mid": "11759131",
+    "pathname": "/opt/service/slotsspin/spin_server/session/spin_session.py",
+    "project": "spin"
+}

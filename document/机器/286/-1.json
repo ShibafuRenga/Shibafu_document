@@ -1,0 +1,19 @@
+{
+    "app_id": "703",
+    "app_version": "7.74.0",
+    "category": "spin",
+    "error_level": "NeedSendInfo",
+    "filename": "/opt/service/slotsspin/spin_server/session/spin_session.py",
+    "funcName": "pack_response",
+    "lineno": "619",
+    "log_host": "ip-10-105-1-7",
+    "log_level": "INFO",
+    "log_time": "2026-08-27T04:01:53.129Z",
+    "machine": "CloverFortuneTrio",
+    "message": {
+        "spin_result": "uid:\"117591311787803341.1105\" result{ currentBet:50000000000 gameplay{ gameType:RESPIN gameStatus:RETRIGGER spinGame{ reels{ items:0 items:0 items:1 items:4 items:0 items:4 items:0 items:2 items:0 extra:\"\" extra:\"\" extra:\"16\" extra:\"26\" extra:\"\" extra:\"\" extra:\"\" extra:\"16\" extra:\"\" columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 columnLength:1 extra2:\"\" extra2:\"\" extra2:\"\" extra2:\"58\" extra2:\"\" extra2:\"32\" extra2:\"\" extra2:\"\" extra2:\"\" items2:0 items2:0 items2:0 items2:4 items2:0 items2:4 items2:0 items2:0 items2:0 } feature{ wildCover{ triggerId:6 } } feature{ collectionState{ collections{ key:\"B01_active\" } collections{ key:\"B01_count\" value:45 } collections{ key:\"B01_level\" value:3 } collections{ key:\"B02_active\" value:1 } collections{ key:\"B02_count\" } collections{ key:\"B02_level\" } collections{ key:\"B03_active\" value:1 } collections{ key:\"B03_count\" } collections{ key:\"B03_level\" } collections{ key:\"current_spin\" value:7 } collections{ key:\"in_respin\" value:1 } collections{ key:\"is_over\" } collections{ key:\"retrigger\" value:1 } collections{ key:\"spins_remaining\" value:4 } collections{ key:\"trigger_id\" value:6 } type:\"feature_progress\" positions{ } } } feature{ wildCover{ triggerId:6 } } feature{ boardsCollection{ collections{ value:2 } collections{ key:2 value:2 } chooseBoard{ } winSymbols{ } extraSymbols{ } } } spinsCount:4 spinsCountdown:4 newSpinsCount:2 triggerID:1 } } jackpot{ } jackpot{ } jackpot{ } jackpot{ increasePool:13664000000000000 } } "
+    },
+    "mid": "11759131",
+    "pathname": "/opt/service/slotsspin/spin_server/session/spin_session.py",
+    "project": "spin"
+}

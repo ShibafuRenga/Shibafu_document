@@ -1,0 +1,32 @@
+===FILE: codebase agent瀹炵幇绛栫暐\searchWorkspaceSymbolsTool.md===
+this._workspace.workspaceSymbols?.filter(s => s.name.includes(query)) ?? [];
+
+return await vscode.commands.executeCommand<vscode.SymbolInformation[]>('vscode.executeWorkspaceSymbolProvider', query);
+
+src/platform/languages/vscode/languageFeaturesServicesImpl.ts
+
+cursor的解释是：
+```
+2. 工作原理
+这个命令会：
+收集所有符号提供者：找到所有注册的工作区符号提供者（Workspace Symbol Providers）
+并行搜索：在每个提供者中搜索匹配的符号
+聚合结果：收集所有提供者返回的符号信息
+返回结果：返回匹配的符号列表
+3. 符号提供者类型
+VS Code 中的符号提供者包括：
+A. 语言服务器提供者
+TypeScript/JavaScript：通过 TypeScript 语言服务器
+Python：通过 Python 语言服务器
+Java：通过 Java 语言服务器
+C#：通过 C# 语言服务器
+Go：通过 Go 语言服务器
+B. 扩展提供者
+各种语言扩展注册的符号提供者
+自定义扩展提供的符号搜索功能
+C. 内置提供者
+VS Code 内置的符号搜索功能
+文件系统级别的符号搜索
+```
+
+感觉像是从代码解释器里面搜变量名？

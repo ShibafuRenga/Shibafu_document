@@ -1,0 +1,2 @@
+===FILE: codebase agent瀹炵幇绛栫暐\findTextInFilesTool.md===
+和findFileTool一样，调了vscode.workspace.findTextInFiles2

@@ -1,0 +1,29 @@
+===FILE: 鏈哄櫒\Debug鐜涓嬫満鍣ㄧ紪杈戝櫒\瀹炵幇璇存槑.md===
+# 机器参数编辑器 — 实现说明
+
+## 已落地（P0）
+
+1. **TestBoardDataPanel 多 Tab**：牌面编辑 / AP设置 / 机器参数  
+2. **机器参数页**（运行时 UI）：多方案、本地 PlayerPrefs、应用写回 Lua Constant、发送到本机 HTTP  
+3. **BlazingWild100xHelper** 白名单：`GetEditableParams` / `GetEditableParamDefaults` / `ApplyEditableParams`（Timing + LockNudge 分档 + 两个 bool）  
+4. **本机接收服务**：`server/machine_param_server.py`
+
+## 真机验证步骤
+
+1. 启动服务：
+   ```bash
+   cd "/Users/zcz/zczWorkspace/document/机器/Debug环境下机器编辑器/server"
+   python3 machine_param_server.py --port 8765
+   ```
+2. 进 BlazingWild100x → 打开 TestBoard → **机器参数** Tab  
+3. 改 Timing → **应用**（当局生效）→ **保存本地** / **新建方案**  
+4. 确认服务器地址（默认 `http://172.16.20.45:8765`）→ **发送**  
+5. 看服务端 `received/` 与面板成功/失败提示  
+
+## 未做（按原评估延后）
+
+- 转速曲线编辑器  
+- 自动写回 Lua 源文件 / Git 提交  
+- Prefab 持久化 Tab UI（当前运行时创建，避免手改 prefab）  
+
+其它机器：在对应 `*Helper.lua` 实现同样三个 API 即可。

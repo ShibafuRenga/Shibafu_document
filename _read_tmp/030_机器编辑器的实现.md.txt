@@ -1,0 +1,29 @@
+===FILE: 鏈哄櫒缂栬緫鍣ㄧ殑瀹炵幇.md===
+# 机器编辑器
+1. 从模版创建机器：
+
+复制场景，然后从Defaultdir读取内容创建文件夹，之后根据机器名称对文件夹改名
+注意场景复制之后还有一步MoveAsset!!
+需要验证：复制scene后，scene里面的内容是否会和原来的引用一致？好像不需要，里面并没有引入prefab
+
+
+2. 导入psd：
+
+用了PluginMaster的PsdFile 读psd的内容就不看了
+instance._psdFile.OnProgressChanged += instance.OnFileLoading;
+instance._psdFile.OnDone += instance.OnFileLoaded;
+instance._psdFile.OnError += instance.OnFileLoadingError;
+
+另外两个算是中间过程监控和异常处理
+这里只看OnDone
+（数据结构）创建了一个字典+树的结构来表示psd的层级
+Group为null的是根，_hierarchyItems表示是整个节点的字典，子节点能访问父节点，父节点中也存有子节点，为什么需要双向？
+只有叶子节点需要保存_texture?这个texture干什么用？
+构建完之后是LoadPendingTextures
+
+还用了新线程好像， 处理Texture的加载（这块没看懂
+加载完之后？？也没有什么新窗口的唤起函数，奇怪
+好像直接ongui了，哦GUI里面反复调用ProgressBar判断是否加载结束,在Update里面会反复调用LoadNextLayer，怪(总之就是加载texture)
+
+层级菜单的渲染逻辑？ Toggle， foldout， foldout开的时候渲染子元素
+

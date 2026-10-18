@@ -1,0 +1,5 @@
+===FILE: UI鐩稿叧.md===
+## AutoFitCustomFontText组件
+
+继承Text，overflow默认均为overflow，不支持富文本。
+重写UpdateGeometry方法，调用AdjustTextComponent调整scale大小，，好像没有文字大小的设定？

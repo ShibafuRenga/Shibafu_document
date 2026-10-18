@@ -1,0 +1,14 @@
+===FILE: 闂璁板綍\2026-8-3.md===
+1. 是不是不应该在Feature内进行保存恢复？而是在OnLateEnter时进行？看EnterMachine.cs，还有音效啥的？
+
+这个问题放着，说是在Feature里面做保存恢复就是个流程问题
+
+2. spine创建材质会指向别的地方，怎么改？
+
+不用SkeletonGraphicDefault，一个是创建的时候用的mateial改成同目录下的对应材质，另一个是inspector上挂载的时候改同名材质
+
+这个也得等仓库权限再改
+
+3. scale为0时有时候不draw有时候draw，287的w01Overlay上的一个节点，和Canvas的模式有关
+
+改UGUI源码，graphic的DoMeshGeneration多个localScale判断,等库权限然后改

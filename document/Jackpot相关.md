@@ -1,0 +1,39 @@
+1. 新的JackPot集成流程
+
+context上挂载jackpotView的wintable
+
+机器设定->拖动、处理两个动画集
+
+#### WinTable动画集
+
+WinTable节点上挂载JackpotView,Jackpot脚本，Jackpot脚本上的JackpotAnima改为WinTable, JackpotName改为Mini，JackpotView上的几个数组长度设置？
+
+jackpot_win\jackpot_idle\jackpot_lock\jackpot_lock_idle\jackpot_unlock
+
+该删除的无用组件都删了
+
+Prefab和起点都设置为Mini，
+
+#### JackpotDialog动画集
+
+挂载上四个对应dialog的预制体，持续时间看动效文档
+
+预制体上挂载MachineDialogAdapter，挂载上对应Coins,修改字体
+
+上面流程记得把没用的texture一并删除
+
+---
+
+
+2. JackPot相关文件和脚本
+
+JackpotDialog
+
+Wintable
+
+jackpot_frame
+
+## JackpotView.cs
+
+
+## Jackpot脚本

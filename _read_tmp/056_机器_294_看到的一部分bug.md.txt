@@ -1,0 +1,7 @@
+===FILE: 鏈哄櫒\294\鐪嬪埌鐨勪竴閮ㄥ垎bug.md===
+1. B01/02/03落在有multiplyReel的格子上时，multiplyReel的状态没有变化。（这个应该是featureReel出来的，应该补个回弹点就可以了
+2. win后进respin，win动画没清掉 done
+3. 进respin的时候应该先不显示multiplyReel，后面B02起作用的时候再显示才对。empty的地方好像没问题，主要看有symbol的地方
+4. 总感觉B01收集少收集了几个。这个收集就是有问题，先看看代码吧。。有一些地方只播了symbol的收集但是没飞，很奇怪。实际应该是都收集了，不过symbol动画播放有些延迟，动画问题。。  我播动画播反了。 done
+5. B03转轴结果出jackpot的时候显示有问题。总不能是既有jackpot又有加钱吧。。看看代码。 done
+6. 
