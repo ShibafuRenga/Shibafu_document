@@ -36,8 +36,8 @@
 value是所有类型的联合体，，集合了GCObj,userdata(void*),int(bool也用int存，有意思),integer,number。lua的整数竟然和number是分开的?!平常用的时候完全没感知。。然后又封装了一层TValue，这个用了Value和int对来保存lua内所有的数据类型（明显value存值，int说是用来表示类型的）。这么看这lua随便local一下还挺大的。。
 现在问题就来了：
 **lua又是怎么处理int和number的转化的？**
-**GCObj和userdata平常使用的时候基本没感知，这俩是干啥用的？**
-**有些数据类型(int？)是和平台有关的，lua怎么处理的这种平台差异？**
+**GCObj和userdata平常使用的时候基本没感知，这俩是干啥用的？**确实，GCObject是和垃圾清理相关的，GCObject里面有三个属性：next指针，类型，GC标记，这个应该就和标记清除算法挂钩了！这样lua的gc也打通了
+**有些数据类型(int？)是和平台有关的，lua怎么处理的这种平台差异？**emm这里lua54改用的是longlong和double的计算，都是直接强转然后算的，没啥好说的。
 **联合体又是个什么表示？完全忘记了，搞清楚联合体之后应该就知道value这个东西有多大了。。**
 **function定义的类型是LuaState，这个LuaState是个啥东西**?
 **博客里有写到什么lightuserdata(前面说的userdata)需要我们自行管理内存，，为啥？后面再想吧**
@@ -45,7 +45,7 @@ value是所有类型的联合体，，集合了GCObj,userdata(void*),int(bool也
 所以说lua里都是这个TValue类型，总感觉完全没提到table啊？这个table是lua自己就有还是xlua里面额外加的？找找table吧？
 
 看起来table并不是lua的基本类型之一？不对，，table一定是用TValue表示的，但是table的引用放在TValue的哪里？
-**table对应到TValue里面，是用value联合体里哪类属性表示的呢？**
+**table对应到TValue里面，是用value联合体里哪类属性表示的呢？** table是GCObject，不属于lua c里面最基本的类型（tt里面有单独定义类型），实际这玩意存在堆里面。其实GCObject这个指针，指向的就是Table在堆中的内存
 **table的表示与实现细节**
 看起来直接分了数组和节点（哈希表）部分
 数组部分就是存了数组的头指针和数组的长度（那数组的容量存在哪?这个数组的扩容与缩容是怎么做的？）
@@ -71,6 +71,8 @@ TKey的结构是一个联合体，联合体里要么是TValue，要么是nk结�
 正常没冲突不说，要是有冲突，先看这个位置原来元素key的哈希能不能对的上这个位置，对不上的话直接把现在这个放进去。如果对的上，再让lastfree前移，继续看别的位置直到找个能放下去的位置。如果对不上，就把当前的元素放进去，原来的元素再用lastfree去找能放置的位置。
 
 **不理解插入过程的lastfree这个变量存在的意义啊，感觉这个得具体看源码，可能只是简单避免了每次都从末尾开始找能放的空间？设计的很奇怪，不理解**
+
+
 **还有个问题，如果长度4，key为1插入个东西，这个会只放到数组部分？还是说hash和数组部分都会放一份?这个大概和遍历有关，如果只放一份，遍历肯定不会重复，如果两个地方都放遍历就还需要做特殊处理。。。**
 
 查询感觉没啥说的，数组部分有从数组部分找，数组没有就去哈希找，反正节点里有存具体key，有冲突的位置用链表一个一个check就行。
@@ -126,8 +128,6 @@ lua虚拟机跑着跑着，跑到transform.position，transform是一个C#对象
 嗯现在问题就是，lua调用transform.position的时候，是怎么最终调用到C#的wrap文件的？或许我需要去找源码来看了
 
 ai整理了之后头还是好晕不知道从哪里看，总之先顺着整理一下？
-
-#### 准备阶段
 
 先生成wrap，比如transform.position,一个_Register告知position对应_getPosition方法，另外就是定义这个getposition方法，这个方法就是找对应的对象，从对象里面取出position再走translator.push。。从ObjectTranslatorPool里面找translator（RealStatePtr对应的??），然后translator找对应的对象。。
 
